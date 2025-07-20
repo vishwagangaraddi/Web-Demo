@@ -1,1 +1,339 @@
-# Web-Demo
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP-Based Report Generation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Background: #F8F4E3, Text: #3D3D3D, Primary Accent: #4A6D7C, Secondary Accent: #C89F9C) -->
+    <!-- Application Structure Plan: The application is structured as a single-page narrative dashboard, guiding the user from a high-level project summary to its technical details. It starts with a Hero section, followed by an interactive flowchart of the system's methodology, allowing users to click and learn about each stage. This is more engaging than a static diagram. Subsequent sections detail the Problem/Solution, the Tech Stack (with clickable cards), and Core Features (in a tabbed view) to break down information into digestible, user-driven chunks. A categorized list of literature with modals for details makes the research accessible. This non-linear, thematic structure prioritizes user exploration and understanding over the rigid format of the original report. -->
+    <!-- Visualization & Content Choices: 1. System Methodology -> Goal: Explain Process -> Viz: Interactive HTML/CSS Flowchart -> Interaction: Click on a stage to reveal descriptive text -> Justification: Breaks down a complex system into easy-to-understand, interactive steps. Replaces a static diagram. -> Library: Vanilla JS, Tailwind. 2. Tech Stack -> Goal: Organize/Inform -> Viz: Grid of styled cards -> Interaction: Click to show details in a modal -> Justification: Modern, clean presentation for key components. -> Library: Vanilla JS, Tailwind. 3. Core Features -> Goal: Inform/Compare -> Viz: Tabbed content area -> Interaction: Click tabs to switch content -> Justification: Segments system capabilities cleanly. -> Library: Vanilla JS, Tailwind. 4. Literature Survey -> Goal: Organize/Inform -> Viz: Categorized HTML list -> Interaction: Click to see full citation in a modal -> Justification: Organizes references thematically for better context. -> Library: Vanilla JS, Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F4E3;
+            color: #3D3D3D;
+        }
+        .accent-bg { background-color: #4A6D7C; }
+        .accent-text { color: #4A6D7C; }
+        .accent-border { border-color: #4A6D7C; }
+        .secondary-accent-bg { background-color: #C89F9C; }
+        .secondary-accent-text { color: #C89F9C; }
+        .flowchart-node {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid #4A6D7C;
+        }
+        .flowchart-node.active {
+            background-color: #4A6D7C;
+            color: #F8F4E3;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flowchart-arrow {
+            color: #4A6D7C;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        .tab.active {
+            border-bottom: 2px solid #4A6D7C;
+            color: #4A6D7C;
+            font-weight: 600;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="app" class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold accent-text mb-4">NLP-Based Report Generation System</h1>
+            <p class="text-lg text-gray-700 max-w-4xl mx-auto">An interactive exploration of an automated system for creating comprehensive reports from diverse sources like images, PDFs, and documents using advanced Natural Language Processing.</p>
+            <p class="mt-2 text-md text-gray-600">Project by: Vishwa Basappa Gangaraddi</p>
+        </header>
+
+        <section id="methodology" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 accent-text">Interactive System Flow</h2>
+            <p class="text-center text-gray-700 max-w-3xl mx-auto mb-12">This section provides a hands-on overview of the project's core methodology. The system processes information through several key stages, from initial input to final report generation. Click on each step in the flowchart below to understand its specific function and role within the overall architecture.</p>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div id="node-1" class="flowchart-node cursor-pointer p-4 rounded-lg shadow-md w-48 text-center" data-content="content-1">
+                    <span class="font-semibold">1. Multi-Modal Input</span>
+                </div>
+                <div class="flowchart-arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                <div id="node-2" class="flowchart-node cursor-pointer p-4 rounded-lg shadow-md w-48 text-center" data-content="content-2">
+                    <span class="font-semibold">2. Text Extraction</span>
+                </div>
+                <div class="flowchart-arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                <div id="node-3" class="flowchart-node cursor-pointer p-4 rounded-lg shadow-md w-48 text-center" data-content="content-3">
+                    <span class="font-semibold">3. Vectorization</span>
+                </div>
+                <div class="flowchart-arrow transform md:rotate-0 rotate-90">&rarr;</div>
+                <div id="node-4" class="flowchart-node cursor-pointer p-4 rounded-lg shadow-md w-48 text-center" data-content="content-4">
+                    <span class="font-semibold">4. Conversational AI</span>
+                </div>
+            </div>
+
+            <div id="flowchart-content-display" class="mt-8 p-6 bg-white rounded-lg shadow-lg min-h-[150px] flex items-center justify-center transition-all duration-300">
+                <div id="content-1" class="flowchart-content hidden">
+                    <h3 class="font-bold text-lg mb-2 accent-text">Multi-Modal Input</h3>
+                    <p class="text-gray-600">The system is designed to be versatile, accepting a variety of input formats. Users can upload standard documents like PDFs, DOCX, and TXT files, as well as images containing text. This flexibility makes it applicable to a wide range of report generation tasks.</p>
+                </div>
+                <div id="content-2" class="flowchart-content hidden">
+                    <h3 class="font-bold text-lg mb-2 accent-text">Text Extraction & Processing</h3>
+                    <p class="text-gray-600">Once an input is received, the system intelligently extracts the textual data. For documents, it parses the content directly. For images, it employs Optical Character Recognition (OCR) to convert visual text into a machine-readable format. The extracted text is then chunked into smaller, manageable pieces for efficient processing.</p>
+                </div>
+                <div id="content-3" class="flowchart-content hidden">
+                    <h3 class="font-bold text-lg mb-2 accent-text">Vectorization & Storage</h3>
+                    <p class="text-gray-600">Each text chunk is converted into a numerical representation (a vector embedding) using models from Hugging Face. These vectors capture the semantic meaning of the text. The vectors are then stored and indexed in a FAISS vector database, which allows for extremely fast and efficient similarity searches.</p>
+                </div>
+                <div id="content-4" class="flowchart-content hidden">
+                    <h3 class="font-bold text-lg mb-2 accent-text">Conversational AI & Report Generation</h3>
+                    <p class="text-gray-600">Using the Langchain framework, the system provides a conversational interface. When a user asks a question, it is converted into a vector and used to find the most relevant text chunks from the vector database. This context is then fed to a large language model to generate a coherent, human-like answer, forming the basis of the final report.</p>
+                </div>
+                 <p id="flowchart-placeholder" class="text-gray-500">Click a node to see its description.</p>
+            </div>
+        </section>
+
+        <section id="problem-solution" class="mb-20">
+             <h2 class="text-3xl font-bold text-center mb-4 accent-text">The Challenge & The Innovation</h2>
+            <p class="text-center text-gray-700 max-w-3xl mx-auto mb-12">Manually synthesizing information from diverse documents to create reports is a significant bottleneck in many fields. This section contrasts the traditional, labor-intensive approach with the automated, efficient solution provided by this project.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-400">
+                    <h3 class="text-2xl font-bold text-red-500 mb-3">The Problem: Manual Inefficiency</h3>
+                    <p class="text-gray-600">Generating reports manually is a time-consuming, error-prone, and resource-intensive process. Analysts must read through multiple documents, extract key information, synthesize findings, and format the output. This process struggles to scale and can lead to inconsistent and delayed reporting, hindering timely decision-making.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 accent-border">
+                    <h3 class="text-2xl font-bold accent-text mb-3">The Solution: Automated Intelligence</h3>
+                    <p class="text-gray-600">This NLP-based system automates the entire workflow. By ingesting multiple sources at once and using AI to understand and summarize content, it produces accurate and comprehensive reports in a fraction of the time. The conversational interface further empowers users to query data and extract specific insights on demand, revolutionizing the reporting process.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech-stack" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 accent-text">Core Technologies</h2>
+            <p class="text-center text-gray-700 max-w-3xl mx-auto mb-12">The system's power comes from a carefully selected stack of modern AI and web development technologies. Each component plays a critical role in the application's functionality. Click on a technology below to learn more about its contribution to the project.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
+                <div class="tech-card cursor-pointer bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform" data-tech="langchain">
+                    <p class="font-bold text-lg">Langchain</p>
+                </div>
+                <div class="tech-card cursor-pointer bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform" data-tech="streamlit">
+                    <p class="font-bold text-lg">Streamlit</p>
+                </div>
+                <div class="tech-card cursor-pointer bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform" data-tech="faiss">
+                    <p class="font-bold text-lg">FAISS</p>
+                </div>
+                <div class="tech-card cursor-pointer bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform" data-tech="huggingface">
+                    <p class="font-bold text-lg">Hugging Face</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="features" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 accent-text">Key System Features</h2>
+            <p class="text-center text-gray-700 max-w-3xl mx-auto mb-12">The application is equipped with several powerful features that make it a robust tool for report generation. This section uses a tabbed interface to detail the primary capabilities. Click each tab to discover how the system handles different tasks and user interactions.</p>
+            
+            <div class="border-b border-gray-300">
+                <nav class="flex space-x-8" aria-label="Tabs">
+                    <button class="tab py-4 px-1 border-b-2 font-medium text-lg text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap active" data-tab="feature-1">Multi-Modal Ingestion</button>
+                    <button class="tab py-4 px-1 border-b-2 font-medium text-lg text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap" data-tab="feature-2">Conversational Q&A</button>
+                    <button class="tab py-4 px-1 border-b-2 font-medium text-lg text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap" data-tab="feature-3">Efficient Vector Search</button>
+                </nav>
+            </div>
+
+            <div class="mt-8">
+                <div id="feature-1" class="feature-content">
+                    <h3 class="font-semibold text-xl mb-2 accent-text">Unified Document Handling</h3>
+                    <p class="text-gray-600">A core strength of the system is its ability to process information from various sources seamlessly. Whether you provide a structured PDF report, an informal DOCX document, a simple TXT file, or even an image of a document page, the system uses the appropriate extraction technique (parsing or OCR) to gather the raw text, creating a unified knowledge base for analysis.</p>
+                </div>
+                <div id="feature-2" class="feature-content hidden">
+                    <h3 class="font-semibold text-xl mb-2 accent-text">Interactive Dialogue Interface</h3>
+                    <p class="text-gray-600">Instead of static reports, the system enables a dynamic dialogue with your documents. Users can ask natural language questions (e.g., "What were the key findings in Q4?") and receive contextually relevant answers generated by a powerful language model. This feature allows for deep, exploratory analysis and instant insight retrieval, making data interaction intuitive and efficient.</p>
+                </div>
+                <div id="feature-3" class="feature-content hidden">
+                     <h3 class="font-semibold text-xl mb-2 accent-text">High-Speed Information Retrieval</h3>
+                    <p class="text-gray-600">At the heart of the Q&A feature is the FAISS vector database. By representing text as semantic vectors, the system can perform similarity searches at incredible speeds. When a question is asked, FAISS instantly identifies the most relevant passages from the source documents, even if they don't contain exact keywords. This ensures that the AI has the precise context needed to formulate an accurate answer.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="literature-review" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-4 accent-text">Foundational Research</h2>
+             <p class="text-center text-gray-700 max-w-3xl mx-auto mb-12">This project builds upon a solid foundation of existing academic research in Natural Language Processing. The following works were influential in shaping the system's architecture and approach. Click on any entry to view the full citation and its relevance.</p>
+             <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="space-y-4">
+                    <div class="lit-item cursor-pointer p-3 hover:bg-gray-100 rounded-md" data-lit="lit-1">
+                        <p class="font-semibold">NLP in Software Requirements Engineering</p>
+                        <p class="text-sm text-gray-500">Systematic literature review by Necula, S.-C., et al. (2024).</p>
+                    </div>
+                     <div class="lit-item cursor-pointer p-3 hover:bg-gray-100 rounded-md" data-lit="lit-2">
+                        <p class="font-semibold">NLP-Based Software Testing</p>
+                        <p class="text-sm text-gray-500">Systematic literature review by Boukhlif, M., et al. (2024).</p>
+                    </div>
+                     <div class="lit-item cursor-pointer p-3 hover:bg-gray-100 rounded-md" data-lit="lit-3">
+                        <p class="font-semibold">Evaluation of Machine-Generated Reports</p>
+                        <p class="text-sm text-gray-500">Research by Mayfield, J., et al. (2024).</p>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <footer class="text-center text-gray-500 pt-8 border-t border-gray-300">
+            <p>Interactive Application designed from the Major Project Report by Vishwa Basappa Gangaraddi.</p>
+            <p>Tontadarya College of Engineering, Gadag | 2024-2025</p>
+        </footer>
+
+    </div>
+
+    <div id="modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden opacity-0">
+        <div class="modal-content bg-white rounded-lg shadow-2xl p-6 w-full max-w-md transform scale-95">
+            <h3 id="modal-title" class="text-2xl font-bold accent-text mb-4"></h3>
+            <p id="modal-body" class="text-gray-600 mb-6"></p>
+            <button id="modal-close" class="w-full accent-bg text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const flowchartNodes = document.querySelectorAll('.flowchart-node');
+            const flowchartContentDisplay = document.getElementById('flowchart-content-display');
+            const flowchartPlaceholder = document.getElementById('flowchart-placeholder');
+            const allFlowchartContents = document.querySelectorAll('.flowchart-content');
+
+            flowchartNodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    const contentId = node.dataset.content;
+                    const targetContent = document.getElementById(contentId);
+
+                    flowchartNodes.forEach(n => n.classList.remove('active'));
+                    node.classList.add('active');
+                    
+                    flowchartPlaceholder.classList.add('hidden');
+                    
+                    allFlowchartContents.forEach(content => content.classList.add('hidden'));
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            const tabs = document.querySelectorAll('.tab');
+            const featureContents = document.querySelectorAll('.feature-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    const targetContent = document.getElementById(tabId);
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    featureContents.forEach(content => content.classList.add('hidden'));
+                    if(targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalClose = document.getElementById('modal-close');
+            const modalOverlay = document.querySelector('.modal-overlay');
+            const modalContent = document.querySelector('.modal-content');
+
+            const techData = {
+                langchain: {
+                    title: 'Langchain',
+                    body: 'An open-source framework for developing applications powered by large language models (LLMs). It provides the core abstraction of "chains" to link components like LLMs, vector databases, and user prompts, orchestrating the entire conversational AI workflow.'
+                },
+                streamlit: {
+                    title: 'Streamlit',
+                    body: 'A Python library that makes it easy to create and share beautiful, custom web apps for machine learning and data science. In this project, it was used to build the user-friendly graphical interface for uploading documents and interacting with the system.'
+                },
+                faiss: {
+                    title: 'FAISS (Facebook AI Similarity Search)',
+                    body: 'A library developed by Facebook AI for efficient similarity search and clustering of dense vectors. It is crucial for quickly finding the most relevant text chunks from the vector database that correspond to a user\'s query.'
+                },
+                huggingface: {
+                    title: 'Hugging Face Models',
+                    body: 'A platform and library providing thousands of pre-trained models for various NLP tasks. This project utilizes sentence-transformer models from Hugging Face to convert text chunks into meaningful vector embeddings for semantic search.'
+                }
+            };
+
+            const litData = {
+                'lit-1': {
+                    title: 'NLP in Software Requirements Engineering',
+                    body: 'This systematic review provides a broad overview of how NLP is being applied to analyze and manage software requirements. It helped inform the project\'s potential applications in understanding complex technical documents. <br><br><strong>Citation:</strong> Necula, S.-C., Dumitriu, F., & Greavu-Şerban, V. (2024). Electronics, 13(11).'
+                },
+                'lit-2': {
+                    title: 'NLP-Based Software Testing',
+                    body: 'This review focuses on the use of NLP to automate various aspects of software testing, such as test case generation. It provided insights into structuring NLP pipelines for technical domains. <br><br><strong>Citation:</strong> Boukhlif, M., et al. (2024). IEEE Access, vol. 12.'
+                },
+                'lit-3': {
+                    title: 'Evaluation of Machine-Generated Reports',
+                    body: 'This paper discusses methodologies for evaluating the quality and coherence of reports generated by AI systems. It was crucial for establishing benchmarks and understanding the success criteria for the project\'s output. <br><br><strong>Citation:</strong> Mayfield, J., et al. (2024). SIGIR \'24.'
+                }
+            };
+
+            document.querySelectorAll('.tech-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const techId = card.dataset.tech;
+                    const data = techData[techId];
+                    if (data) {
+                        modalTitle.textContent = data.title;
+                        modalBody.innerHTML = data.body;
+                        openModal();
+                    }
+                });
+            });
+             document.querySelectorAll('.lit-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const litId = item.dataset.lit;
+                    const data = litData[litId];
+                    if (data) {
+                        modalTitle.textContent = data.title;
+                        modalBody.innerHTML = data.body;
+                        openModal();
+                    }
+                });
+            });
+
+
+            function openModal() {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modalOverlay.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalOverlay.classList.add('opacity-0');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+            
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
